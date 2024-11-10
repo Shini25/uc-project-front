@@ -1,0 +1,120 @@
+<!-- positionnemen -->
+ <h2>Positionnement</h2>
+ absolute, relative, fixed , sticky
+
+ <!-- positionnement absolue -->
+<h3>absolute</h3>
+<div class="absolute inset-y-0">
+    <span> positionner un élément de manière absolue en haut 
+    et en bas de son conteneur parent.
+    </span>
+</div>
+
+<!-- positionnement relatif -->
+ <h3>relative</h3>
+<!-- barre de recherche  -->
+<div class="relative">
+    <input type="text" placeholder="Rechercher..."
+           class="pl-10 pr-4 py-2 border rounded-lg w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+    <span class="absolute bg-slate-600  inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+      <mat-icon>search</mat-icon>
+    </span>
+</div>
+
+<!-- positionnement fixe -->
+ <h3>fixed</h3>
+ <div class="fixed bottom-2 right-6 border rounded-lg border-red-400  p-2">
+    <span>
+        exemple de positonnement fixe
+    </span>
+ </div>
+
+ <!-- position d'un element -->
+  <p>position d'un élément sur l'axe horizontal (l'axe X) à partir d'une certaine taille d'écran.
+  </p>
+
+  <div>
+    <sanp>sm:translate-x-0</span>
+  </div>
+
+  Résumé des Intervalles :
+  Moins de 640px : Pas de préfixe.
+  Entre 640px et 767px : sm:
+  Entre 768px et 1023px : md:
+  Entre 1024px et 1279px : lg:
+  Entre 1280px et 1535px : xl:
+  1536px et plus : 2xl:
+
+  -translate-x-full et md:translate-x-0 sont utilisées pour contrôler la position horizontale d'un élément sur l'axe 
+  css : transform : translateX(0)/ (-100%)
+  
+ <!-- border  -->
+ <h3>border</h3>
+ <div class="border-5 border-red-200 border-dotted rounded-lg p-4 w-1/2 flex justify-center items-center gap-3">
+    <span class="border-2 border-blue-600 ">
+      Exemple de border
+    </span>
+</div>
+
+<!-- arriere plan --> 
+ <h3>background</h3>
+ bg-[color]
+ <div class="bg-blue-600 text-white p-2 rounded-lg w-1/2 flex justify-center items-center gap-3">
+    <span>
+      Exemple de background
+    </span>
+ </div>
+ 
+ <!-- texte -->
+<h3>size</h3>
+ <div>
+  text-
+
+  text-base //  16px 
+  text-xs,lg
+  text-[x-unite] // exemple text-[1em]
+</div>
+
+<h3>taille</h3>
+<div>
+  font-
+
+  font-thin // 100
+  font-normal // 400 
+  font-bold
+</div>
+
+
+ <!-- boite -->
+
+
+ <!-- shadow -->
+
+
+
+ <!-- overflow -->
+  overflow-x: auto | hidden | scroll;
+  overflow-y: auto | hidden | scroll;
+  overflow: auto | hidden | scroll;
+
+ <!-- flexbox -->
+  flex-direction: row | column | row-reverse | column-reverse;
+  justify-content: flex-start | flex-end | center | space-between | space-around;
+  align-items: flex-start | flex-end | center | baseline | stretch;
+  flex-wrap: nowrap | wrap | wrap-reverse;
+  align-content: flex-start | flex-end | center | space-between | space-around | stretch;
+
+ <!-- grid -->
+
+ <!-- dark mode  -->
+  <body class="dark:bg-gray-900 dark:text-white"></body>
+
+  <!-- accecibilite  -->
+  aria-label="" est une propriété d'accessibilité/clarte
+
+  <!-- sidebar -->
+  data-drawer-target et data-drawer-toggle : Ces attributs personnalisés sont utilisés par les scripts JavaScript pour identifier quel élément doit être ciblé par l'action
+
+  data-drawer-toggle indique que le bouton est responsable du basculement (toggle) de l'état visible/non-visible du sidebar.
+
+  

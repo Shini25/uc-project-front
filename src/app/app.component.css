@@ -1,0 +1,23 @@
+
+a {
+    text-decoration:none
+}
+
+.sidebar {
+    overflow: hidden; /* Cache la barre de défilement par défaut */
+}
+
+.sidebar:hover {
+    overflow-y: auto; 
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: #F1F1F1;
+    border-radius: 2px;
+    cursor: pointer;
+}
+

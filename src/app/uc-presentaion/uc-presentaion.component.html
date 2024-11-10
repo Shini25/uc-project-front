@@ -1,0 +1,136 @@
+<div class="flex flex-col p-4 h-full w-full backdrop-blur-sm  bg-transparent z-[1000] ">
+  
+  <div class="h-auto mt-8">
+    <div class="grid grid-cols-1 mb-8 justify-items-center w-full ">
+      <div class="w-full ">
+        <h6 class="text-center"> <span class="font-bold dark:text-zinc-100 ">Présentation des membres de l'UC</span></h6>
+      </div>
+
+      <div class="w-full md:w-1/2 text-center grid grid-cols-1 gap-4">
+        <!-- barre de recherche -->
+        <form class="w-full  ">   
+          <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+          <div class="relative">
+              <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                  <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                  </svg>
+              </div>
+              <input type="search" (input)="onSearch($event)" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-sky-800 focus:border-sky-800 dark:bg-zinc-400/30 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-800 dark:focus:border-sky-800" placeholder="Rechercher un chef..." required />
+          </div>
+        </form>
+
+        <!-- Résultats de la recherche -->
+        <div *ngIf="filteredChefs.length > 0" class="w-full  mx-auto mt-4 bg-gray-50 dark:bg-zinc-400/30 rounded-lg shadow-md">
+          <ul>
+            <li *ngFor="let chef of filteredChefs" (click)="selectChef(chef)" class="px-4 py-2 cursor-pointer hover:bg-gray-100 text-left dark:text-zinc-200">
+              {{ chef.nom }} {{ chef.prenoms }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="!searchActive" class="mx-auto md:w-full w-full  p-4 rounded-md border-2 border-gray-200 dark:border-zinc-400/40 ">
+    <ul role="list" class="flex flex-col gap-y-4 justify-center items-center mb-4 ">
+      <li *ngFor="let chef of getUcChefs()" class="p-0 border-2 border-gray-200 dark:border-zinc-100/20 rounded-lg bg-white dark:bg-sky-950 w-full sm:w-[70%] xl:w-[35%]">
+        <div class="flex  items-center p-2 gap-x-3  overflow-hidden">
+          <div class=""> 
+            <img class="h-24 w-24 rounded-full" *ngIf="chef.photos && chef.photos.length > 0" [src]="'data:image/png;base64,' + chef.photos[0]" alt="">
+          </div>
+          <div class="grid grid-cols-1 gap-1 flex-1 p-2 border-2 border-gray-100 dark:border-zinc-100/20 bg-zinc-50 dark:bg-zinc-400/20 rounded-md dark:text-zinc-100">
+            <div class="">
+              <span class="font-medium text-md text-zinc-800 dark:text-zinc-100  " > {{ chef.nom }} </span>
+            </div>
+            <div>
+              <span class="text-sm text-zinc-800 dark:text-zinc-100"> {{ chef.prenoms }} </span>
+            </div>
+            <div>
+              <span class="text-sm text-zinc-500 dark:text-zinc-300"> {{ chef.email }} </span>
+            </div>
+            <div>
+              <span class="text-sm text-zinc-800 dark:text-zinc-100"> {{ chef.contact }} </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full p-2">
+
+          <div class="border-t border-zinc-400 grid grid-cols-1 gap-1 py-2  ">
+            <div class="h-full w-full text-sm text-zinc-500 dark:text-zinc-200">
+            </div>
+            <div class="h-full w-full grid grid-cols-2 gap-1"> 
+              <div class="w-auto text-xs p-2 border text-center shadow-sm bg-zinc-400 text-zinc-100 font-medium rounded-md cursor-pointer" (click)="openAttributionModal(chef)">
+                Attributions
+              </div>
+              <div class="w-auto text-xs p-2 dark:bg-sky-800  text-sky-900 dark:text-zinc-100 text-center font-medium shadow-sm border border-sky-900 dark:border-sky-800 rounded-md cursor-pointer" [routerLink]="['/auth/chef-motduchef', chef.id]" [queryParams]="{ nom: chef.nom, prenoms: chef.prenoms }">
+                Mot du chef
+              </div>
+            </div>
+            <div class="w-full flex justify-center text-xs p-2 dark:bg-sky-800  text-sky-900 dark:text-zinc-100 text-center font-medium shadow-sm border border-sky-900 dark:border-sky-800 rounded-md cursor-pointer" [routerLink]="['/auth/responsablesAudit', chef.sousType]">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+              </svg>              
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <ul role="list" class="grid gap-x-8 gap-y-12 lg:grid-cols-2 xl:grid-cols-3 sm:gap-y-4 xl:col-span-3 ">
+      <li *ngFor="let chef of getUcMembers()" class=" lg:p-0 md:px-10 p-0 border-2 border-gray-200 dark:border-zinc-100/20 rounded-lg bg-white  dark:bg-sky-950" >
+        
+        <div class="flex  items-center p-2 gap-x-3  overflow-hidden">
+          <div class=""> 
+            <img class="h-24 w-24 rounded-full" *ngIf="chef.photos && chef.photos.length > 0" [src]="'data:image/png;base64,' + chef.photos[0]" alt="">
+          </div>
+          <div class="grid grid-cols-1 gap-1 flex-1 p-2 border-2 border-gray-100 dark:border-zinc-100/20 bg-zinc-50 dark:bg-zinc-400/20 rounded-md dark:text-zinc-100">
+            <div class="">
+              <span class="font-medium text-md text-zinc-800 dark:text-zinc-100  " > {{ chef.nom }} </span>
+            </div>
+            <div>
+              <span class="text-sm text-zinc-800 dark:text-zinc-100"> {{ chef.prenoms }} </span>
+            </div>
+            <div>
+              <span class="text-sm text-zinc-500 dark:text-zinc-300"> {{ chef.email }} </span>
+            </div>
+            <div>
+              <span class="text-sm text-zinc-800 dark:text-zinc-100"> {{ chef.contact }} </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full p-2">
+
+          <div class="border-t border-zinc-400 grid grid-cols-1 gap-1 py-2  ">
+            <div class="h-full w-full grid grid-cols-1"> 
+              <div class="w-auto text-xs p-2 border text-center shadow-sm bg-zinc-400 text-zinc-100 font-medium rounded-md cursor-pointer" (click)="openAttributionModal(chef)">
+                Attributions
+              </div>
+              <div class="w-auto text-xs p-2 dark:bg-sky-800  text-sky-900 dark:text-zinc-100 text-center font-medium shadow-sm border border-sky-900 dark:border-sky-800 rounded-md cursor-pointer" [routerLink]="['/auth/responsablesAudit', chef.sousType]">
+                Archive
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="isAttributionModalVisible" class="fixed inset-0 flex items-center justify-center bg-gray-300 dark:bg-sky-950/30 bg-opacity-50 backdrop-blur-sm overflow-hidden z-20 p-2 lg:p-0 md:ml-64">
+  <div [ngClass]="{'scale-100': !isZoomedAttributions, 'scale-110': isZoomedAttributions}" class="bg-white dark:bg-sky-950 form-content-attributions p-6  rounded-lg shadow-xl lg:w-[65%] w-full transform transition-transform duration-300">
+    <span class="text-2xl font-medium text-gray-900 dark:text-zinc-100 !mb-4 ">Attributions</span>
+    <ul class="text-gray-500">
+      <li *ngFor="let attribution of selectedChef?.attributions" class="h-auto w-full mb-2 list-disc dark:text-zinc-200">
+        {{ attribution.attribution }}
+      </li>
+    </ul>
+    <div class="flex justify-end mt-4">
+      <button (click)="closeModal()" class="text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm px-5 py-2.5 ml-2">Close</button>
+    </div>
+  </div>
+</div>

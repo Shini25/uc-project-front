@@ -1,0 +1,23 @@
+<div class="flex flex-col p-4 h-full w-full backdrop-blur-sm  bg-transparent z-[1000] ">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+    <div>
+      <span class="text-2xl font-medium text-white mb-4 ">Mot du chef</span>
+    </div>
+    <div class="md:text-right mb-2 ">
+      <span class="dark:text-zinc-200 font-medium">{{ chefNom }}</span><br>
+      <span class="dark:text-zinc-300 text-zinc-600">{{ chefPrenoms }}</span>
+    </div>
+  </div>
+
+  <div class="bg-zinc-100 dark:bg-transparent shadow-md shadow-black/20 dark:text-zinc-200 p-4 z-50 " *ngFor="let motDuChef of motDuChefs">
+    {{ motDuChef }}
+  </div>
+
+
+</div>
+
+<button class="fixed bottom-10 right-6 bg-yellow-500 text-zinc-100 shadow-md shadow-black/20 rounded-lg p-2" (click)="goBack()">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+  </svg>
+</button>

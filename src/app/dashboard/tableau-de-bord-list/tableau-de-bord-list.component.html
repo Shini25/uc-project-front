@@ -1,0 +1,121 @@
+<div class="mx-auto px-4 py-6">
+
+    <!-- header -->
+     <div class="flex flex-col  w-full ">
+        <div class="w-full  "><h6 class="text-gray-800 text-2xl  m-0"><span class="font-bold">Executions Budgetaires</span></h6></div>
+        <div class="flex flex-row flex-1  justify-between">
+            <div class="w-1/2 h-12 ">
+                <div class="flex">
+                    <div class="w-1/6">
+                        <select id="searchTypeSelect" (change)="onSearchTypeChange($event)" 
+                                class="block w-full pl-3 pr-10 py-2 text-base text-gray-800 bg-gray-50 border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-s-md cursor-pointer">
+                          <option value="title">titre</option>
+                          <option value="date">date</option>
+                        </select>
+                    </div>
+                    <div class="relative w-full " *ngIf="searchType === 'title'">
+                        <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Rechercher par titre" 
+                        (input)="onSearch($event)" 
+                        class="block w-full pl-3 pr-3 py-2 text-base text-black bg-white border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+        
+                    </div>
+                    <div class="relative w-full " *ngIf="searchType === 'date'">
+                            <input 
+                              type="date" 
+                              id="searchDate" 
+                              (change)="onDateChange($event)" 
+                              class="block w-full pl-3 pr-3 py-2 text-base text-gray-300 bg-gray-100 border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md" />
+                    </div>
+                    <div class="flex justify-center items-center cursor-pointer bg-blue-800 p-1 rounded-e-md" (click)="resetFilters() ">
+                      
+                        <!-- <button 
+                          class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" 
+                          >
+                          Réinitialiser
+                        </button> -->
+                        
+                          <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-white dark:text-gray-800">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                          </svg>
+                      
+                    </div>
+                </div>
+            </div>
+            <div class="w-1/2 h-12 ">
+                <div class="w-full  flex justify-end">
+                    <select id="tableauDeBordTypeSelect" (change)="onTypeChange($event)" 
+                            class="block w-1/2 pl-3 pr-10 text-base text-gray-800 bg-gray-50 border-gray-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                    <option *ngFor="let type of tableauDeBordTypes" [value]="type">{{ type | replaceUnderscore }}</option>
+                    </select>
+                </div>    
+            </div>
+        </div>
+     </div>
+  
+    <!-- TableauDeBord Table -->
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg overflow-auto max-h-[520px] ">
+      <table class="w-full text-sm text-left text-gray-400 dark:text-gray-400">
+        <thead class="text-xs text-gray-800 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" class="px-6 py-3">Titre</th>
+            <th scope="col" class="px-6 py-3">Date d'insertion</th>
+            <th scope="col" class="px-6 py-3">Type</th>
+            <th scope="col" class="px-6 py-3">Données inséré par</th>
+            <th scope="col" class="px-6 py-3">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tableauDeBord of paginatedTableauDeBords" class="bg-white text-gray-800 border-b border-gray-700">
+            <td class="px-6 py-4">{{ tableauDeBord.titre }}</td>
+            <td class="px-6 py-4">{{ tableauDeBord.dateInsertion | date:'medium' }}</td>
+            <td class="px-6 py-4">{{ tableauDeBord.accesReserveType.toString() | replaceUnderscore }}</td>
+            <td class="px-6 py-4">{{ tableauDeBord.user_account.numero }}</td>
+            <td class="px-6 py-4">
+              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="downloadTableauDeBord(tableauDeBord)">
+                Consulter
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <!-- No Results Message -->
+      <div *ngIf="filteredTableauDeBords.length === 0" class="text-center text-red-500 font-semibold ">
+        Aucun résultat trouvé.
+      </div>
+    </div>
+  
+    <!-- Pagination Controls -->
+    <div class="flex justify-between items-center mt-4 text-gray-400">
+      <!-- Rows per page -->
+      <div>
+        <label for="rowsPerPage" class="mr-2">Lignes par page:</label>
+        <select id="rowsPerPage" (change)="onRowsPerPageChange($event)" 
+                class="bg-gray-50 border-gray-600 text-gray-800 rounded-md">
+          <option [value]="5">5</option>
+          <option [value]="10" selected>10</option>
+          <option [value]="20">20</option>
+          <option [value]="50">50</option>
+        </select>
+      </div>
+  
+      <!-- Pagination Buttons -->
+      <div>
+        <button class="px-4 py-2  text-gray-400 rounded-md" [disabled]="currentPage === 1" (click)="previousPage()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+              </svg>              
+        </button>
+        <button class="px-4 py-2  text-gray-400 rounded-md" [disabled]="currentPage >= totalPages" (click)="nextPage()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              </svg>
+              
+        </button>
+      </div>
+    </div>
+  </div>
+  

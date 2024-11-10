@@ -1,0 +1,403 @@
+<div class="flex flex-col md:p-20 p-4 !pt-1 h-full w-full !z-[1000]  ">
+  <div class="flex justify-center items-center w-full h-20 bg-transparent backdrop-blur-lg sticky top-[8vh] !z-[10]">
+    <h6 class="text-2xl text-center"><span class="text-blue-950 dark:text-zinc-100 font-semibold">Planifier une réunion</span></h6>
+  </div>
+
+  <div class="w-full  h-auto flex flex-row justify-start items-center !z-[2]">
+    <div class="w-auto">
+      <button type="button" (click)="addNewForm()" class="mb-4 p-2 bg-sky-800 border border-gray-300/30 text-zinc-100 hover:!bg-sky-900 text-sm rounded-md">Ajouter un formulaire</button>
+    </div>
+  </div>
+  <div class="w-full h-auto flex flex-row justify-start items-center !z-[2]">
+    <div class="col-span-2 w-full flex flex-row gap-1 h-auto text-sm text-yellow-500">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+        </svg>            
+      </div>
+      <div>
+        Vérifier les informations avant de planifier
+      </div>
+    </div>
+  </div>
+
+  <div *ngFor="let form of forms; let i = index" class="mb-4 !z-[2]">
+    <div>
+      <span class="text-sm text-zinc-800 dark:text-zinc-100 font-bold">Reunion {{i+1}}</span>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit(i)" class="w-full h-auto bg-zinc-50 dark:bg-sky-950 lg:grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-2 border-2 border-zinc-400/50 rounded-md p-3 pb-0 !z-[4]">
+
+      <div class="w-full h-auto bg-white dark:bg-sky-900 p-4 border-2 grid grid-cols-1 gap-2 border-zinc-400/30 rounded-md mb-4 ">
+        <div class="space-y-2">
+          <!-- type de la reunion -->
+          <div class="flex items-center ps-4 border bg-zinc-50 dark:bg-sky-950 border-gray-200 rounded dark:border-gray-700">
+            <input formControlName="meetingType" id="bordered-radio-1" type="radio" value="interne" name="meetingType" class="w-4 h-4 text-sky-900 bg-gray-100  border-gray-300 focus:ring-sky-800 dark:focus:ring-sky-900 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            <label for="bordered-radio-1" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Interne</label>
+          </div>
+          <div class="flex items-center ps-4 border bg-zinc-50 dark:bg-sky-950 border-gray-200 rounded dark:border-gray-700">
+            <input formControlName="meetingType" checked id="bordered-radio-2" type="radio" value="externe" name="meetingType" class="w-4 h-4 text-sky-900 bg-gray-100 border-gray-300 focus:ring-sky-800 dark:focus:ring-sky-900 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            <label for="bordered-radio-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Externe</label>
+          </div>
+
+          <div class="mb-5">
+            <label for="objet" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Objet</label>
+            <input type="text" id="objet" formControlName="objet" class="bg-zinc-50 dark:bg-sky-950 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-800 focus:border-sky-800 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-800 dark:focus:border-sky-800">
+            <div *ngIf="form.get('objet')?.invalid && (form.get('objet')?.dirty || form.get('objet')?.touched)" class="text-red-500 text-sm">
+              <div *ngIf="form.get('objet')?.errors?.['required']">Objet is required.</div>
+              <div *ngIf="form.get('objet')?.errors?.['minlength']">Objet must be at least 3 characters long.</div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-x-6">
+            <div class="mb-5">
+              <label for="dateMeeting" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date de début</label>
+              <input type="datetime-local" id="dateMeeting" formControlName="dateMeeting" class="bg-zinc-50 dark:bg-sky-950 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-800 focus:border-sky-800 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-800 dark:focus:border-sky-800">
+              <div *ngIf="form.get('dateMeeting')?.invalid && (form.get('dateMeeting')?.dirty || form.get('dateMeeting')?.touched)" class="text-red-500 text-sm">
+                <div *ngIf="form.get('dateMeeting')?.errors?.['required']">Date de début is required.</div>
+              </div>
+            </div>
+            <div class="mb-5">
+              <label for="lieu" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lieu</label>
+              <input type="text" id="lieu" formControlName="location" class="bg-zinc-50 dark:bg-sky-950 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-800 focus:border-sky-800 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-800 dark:focus:border-sky-800">
+              <div *ngIf="form.get('location')?.invalid && (form.get('location')?.dirty || form.get('location')?.touched)" class="text-red-500 text-sm">
+                <div *ngIf="form.get('location')?.errors?.['required']">Lieu is required.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full h-auto bg-white dark:bg-sky-900 p-4 border-2 flex flex-col gap-2 border-gray-400/30 rounded-md mb-4">
+        <div id="accordion-collapse" data-accordion="collapse">
+          <h6 id="accordion-collapse-heading-1">
+            <button type="button" class="dark:bg-sky-950 flex items-center  justify-between w-full p-4 text-sm font-medium text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" (click)="toggleAccordion(0)" data-accordion-target="#accordion-collapse-body-1" aria-expanded="true" aria-controls="accordion-collapse-body-1">
+              <span>Responsable</span>
+              <svg data-accordion-icon [ngClass]="{'rotate-180': accordionOpenStates[0]}" class="w-3 h-3 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+              </svg>
+            </button>
+          </h6>
+          <div id="accordion-collapse-body-1" [ngClass]="{'hidden': !accordionOpenStates[0]}" aria-labelledby="accordion-collapse-heading-1">
+            <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-sky-950">
+              <div formArrayName="organizersMail" class="space-y-2">
+                <div *ngIf="form.get('meetingType')?.value === 'interne'; else manualResponsables">
+                  <div *ngFor="let control of getOrganizersMail(i).controls; let j = index" [formGroupName]="j" class="grid grid-cols-1 gap-2">
+                    <div class="mb-2">
+                      <!-- Sélection de l'email du chef -->
+                      <select formControlName="email" class="dark:bg-zinc-400 dark:text-zinc-100 dark:font-medium w-full p-2 border border-gray-300 rounded-md" (change)="onEmailChangeOrganizers(i, j)" required>
+                        <option *ngFor="let chef of chefs" [value]="chef.email">{{ chef.nom }} {{ chef.prenoms }}</option>
+                      </select>
+                      
+                      <!-- Message d'erreur si le champ email est requis mais non rempli -->
+                      <div *ngIf="getOrganizersMail(i).at(j).get('email')?.invalid && (getOrganizersMail(i).at(j).get('email')?.dirty || getOrganizersMail(i).at(j).get('email')?.touched)" class="text-red-500 text-sm">
+                        <div *ngIf="getOrganizersMail(i).at(j).get('email')?.errors?.['required']">L'email est obligatoire.</div>
+                        <div *ngIf="getOrganizersMail(i).at(j).get('email')?.errors?.['email']">L'email est invalide.</div>
+                        <div *ngIf="getOrganizersMail(i).at(j).get('email')?.errors?.['duplicateEmail']">L'email est déjà sélectionné.</div>
+                      </div>
+                    </div>
+                    <div class="hidden">
+                      <!-- Champ texte pour afficher le nom et prénom automatiquement -->
+                      <input type="text" formControlName="name" [value]="getOrganizerName(i, j)" class="w-full p-2 border border-gray-300 rounded-md" readonly />
+                    </div>
+                  </div>
+                </div>
+                <ng-template #manualResponsables>
+                  <div *ngFor="let control of getOrganizersMail(i).controls; let j = index" [formGroupName]="j">
+                    <div class="p-2 grid grid-cols-1 gap-2">
+                      <div>
+                        <input formControlName="email" placeholder="Email" class="dark:bg-zinc-400 dark:text-zinc-50 dark:placeholder-zinc-200 dark:font-medium placeholder-gray-500 w-full p-2 border border-gray-300 rounded-md" />
+                        <div *ngIf="getOrganizersMail(i).at(j).get('email')?.invalid && (getOrganizersMail(i).at(j).get('email')?.dirty || getOrganizersMail(i).at(j).get('email')?.touched)" class="text-red-500 text-sm">
+                          <div *ngIf="getOrganizersMail(i).at(j).get('email')?.errors?.['required']">L'email est obligatoire.</div>
+                          <div *ngIf="getOrganizersMail(i).at(j).get('email')?.errors?.['email']">L'email est invalide.</div>
+                          <div *ngIf="getOrganizersMail(i).at(j).get('email')?.errors?.['duplicateEmail']">L'email est déjà sélectionné.</div>
+                        </div>
+                      </div>
+                      <div>
+                        <input formControlName="name" placeholder="Nom" class="dark:bg-zinc-400 dark:text-zinc-50 dark:placeholder-zinc-300 dark:font-medium placeholder-gray-500 w-full p-2 border border-gray-300 rounded-md" />
+                        <div *ngIf="getOrganizersMail(i).at(j).get('name')?.invalid && (getOrganizersMail(i).at(j).get('name')?.dirty || getOrganizersMail(i).at(j).get('name')?.touched)" class="text-red-500 text-sm">
+                          <div *ngIf="getOrganizersMail(i).at(j).get('name')?.errors?.['required']">Le nom est requis.</div>
+                        </div>
+                      </div>
+                      <div>
+                        <input formControlName="phone_number" placeholder="Numero de telephone" class="dark:bg-zinc-400 dark:text-zinc-50 dark:placeholder-zinc-300 dark:font-medium placeholder-gray-500 w-full p-2 border border-gray-300 rounded-md" />
+                        <div *ngIf="getOrganizersMail(i).at(j).get('phone_number')?.invalid && (getOrganizersMail(i).at(j).get('phone_number')?.dirty || getOrganizersMail(i).at(j).get('phone_number')?.touched)" class="text-red-500 text-sm">
+                          <div *ngIf="getOrganizersMail(i).at(j).get('phone_number')?.errors?.['invalidPhoneNumber']">Le numéro doit commencer par +261 et contenir exactement 9 chiffres après.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+                <div class="flex items-center gap-2 mt-2 p-2 text-xs  text-white rounded-md">
+                <button type="button" (click)="addOrganizerMail(i)" class="flex items-center gap-2 mt-2 p-2 text-xs bg-yellow-500 text-white rounded-md">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  <div>
+                    Ajouter 
+                  </div>              
+                </button>
+                <button type="button" (click)="deleteOrganizerMail(i)" class="flex items-center gap-2 mt-2 px-1 py-1 text-xs bg-gray-200 text-gray-500 border border-gray-300 rounded-md">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                  </svg>          
+                </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h6 id="accordion-collapse-heading-2">
+            <button type="button" class="dark:bg-sky-950 flex items-center text-sm justify-between w-full p-4 font-medium text-gray-500 border border-b-0 border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" (click)="toggleAccordion(1)" data-accordion-target="#accordion-collapse-body-2" aria-expanded="false" aria-controls="accordion-collapse-body-2">
+              <span>Participants</span>
+              <svg data-accordion-icon [ngClass]="{'rotate-180': accordionOpenStates[1]}" class="w-3 h-3 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+              </svg>
+            </button>
+          </h6>
+
+          <div id="accordion-collapse-body-2" [ngClass]="{'hidden': !accordionOpenStates[1]}" aria-labelledby="accordion-collapse-heading-2">
+            <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700">
+              <div formArrayName="participantsMail" class="space-y-2">
+                <div *ngIf="form.get('meetingType')?.value === 'interne'; else manualParticipants">
+                  <div *ngFor="let control of getParticipantsMail(i).controls; let j = index" [formGroupName]="j" class="grid grid-cols-1 gap-2">
+                    <div class="mb-2">
+                      <select formControlName="email" class="dark:bg-zinc-400  dark:text-zinc-100 dark:font-medium w-full p-2 border border-gray-300 rounded-md" (change)="onEmailChangeParticipants(i, j)" required>
+                        <option *ngFor="let chef of chefs" [value]="chef.email">{{ chef.nom }} {{ chef.prenoms }}</option>
+                      </select>
+                      
+                      <div *ngIf="getParticipantsMail(i).at(j).get('email')?.invalid && (getParticipantsMail(i).at(j).get('email')?.dirty || getParticipantsMail(i).at(j).get('email')?.touched)" class="text-red-500 text-sm">
+                        <div *ngIf="getParticipantsMail(i).at(j).get('email')?.errors?.['required']">L'email est obligatoire..</div>
+                      </div>
+                    </div>
+                    <div class="hidden">
+                      <input type="text" formControlName="name" [value]="getParticipantName(i, j)" class="w-full p-2 border border-gray-300 rounded-md" readonly />
+                    </div>
+                  </div>
+                </div>
+                <ng-template #manualParticipants>
+                  <div *ngFor="let control of getParticipantsMail(i).controls; let j = index" [formGroupName]="j">
+                    <div class="p-2 grid grid-cols-1 gap-2">
+                      <div>
+                        <input type="email" formControlName="email" placeholder="Email" class="dark:bg-zinc-400 dark:text-white dark:font-medium dark:placeholder-zinc-300 placeholder-gray-500 w-full p-2 border border-gray-300 rounded-md" />
+                        <div *ngIf="getParticipantsMail(i).at(j).get('email')?.invalid && (getParticipantsMail(i).at(j).get('email')?.dirty || getParticipantsMail(i).at(j).get('email')?.touched)" class="text-red-500 text-sm">
+    
+                          <div *ngIf="getParticipantsMail(i).at(j).get('email')?.errors?.['required']">
+                            L'email est obligatoire.
+                          </div>
+                      
+                          <div *ngIf="getParticipantsMail(i).at(j).get('email')?.errors?.['email']">
+                            L'email est invalide.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <input formControlName="name" placeholder="Nom" class="dark:bg-zinc-400 dark:text-zinc-50 dark:font-medium dark:placeholder-zinc-300 placeholder-gray-500 w-full p-2 border border-gray-300 rounded-md" />
+                        <div *ngIf="getParticipantsMail(i).at(j).get('name')?.invalid && (getParticipantsMail(i).at(j).get('name')?.dirty || getParticipantsMail(i).at(j).get('name')?.touched)" class="text-red-500 text-sm">
+                          <div *ngIf="getParticipantsMail(i).at(j).get('name')?.errors?.['required']">Le nom est requis.</div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <input formControlName="phone_number" placeholder="Numero de telephone" class="dark:bg-zinc-400 dark:text-zinc-50 dark:placeholder-zinc-300 dark:font-medium placeholder-gray-500 w-full p-2 border border-gray-300 rounded-md" />
+                        <div *ngIf="getParticipantsMail(i).at(j).get('phone_number')?.invalid && (getParticipantsMail(i).at(j).get('phone_number')?.dirty || getParticipantsMail(i).at(j).get('phone_number')?.touched)" class="text-red-500 text-sm">
+                          <div *ngIf="getParticipantsMail(i).at(j).get('phone_number')?.errors?.['invalidPhoneNumber']">Le numéro doit commencer par +261 et contenir exactement 9 chiffres après.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+                <div class="flex items-center gap-2 mt-2 p-2 text-xs  text-white rounded-md">
+                  <button type="button" (click)="addParticipantMail(i)" class="flex items-center gap-2 mt-2 p-2 text-xs bg-yellow-500 text-white rounded-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  <div>
+                    Ajouter 
+                  </div>              
+                </button>
+
+                <button type="button" (click)="deleteParticipantMail(i)" class="flex items-center gap-2 mt-2 px-1 py-1 text-xs bg-gray-200 text-gray-500 border border-gray-300 rounded-md">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                  </svg>          
+                </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h6 id="accordion-collapse-heading-3">
+            <button type="button" class="dark:bg-sky-950 flex items-center text-sm justify-between w-full p-4 font-medium text-gray-500 border border-b-0 border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" (click)="toggleAccordion(2)" data-accordion-target="#accordion-collapse-body-3" aria-expanded="false" aria-controls="accordion-collapse-body-3">
+              <span>Logistique</span>
+              <svg data-accordion-icon [ngClass]="{'rotate-180': accordionOpenStates[2]}" class="w-3 h-3 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+              </svg>
+            </button>
+          </h6>
+          <div id="accordion-collapse-body-3" [ngClass]="{'hidden': !accordionOpenStates[2]}" aria-labelledby="accordion-collapse-heading-3">
+            <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700">
+              <div formArrayName="logistics" class="space-y-2">
+                <div *ngFor="let control of getLogistics(i).controls; let j = index">
+                  <input [formControlName]="j" placeholder="Logistique" class="dark:bg-zinc-400 dark:text-zinc-50 dark:placeholder-zinc-300 placeholder-gray-500 w-full p-2 border border-gray-300 rounded-md" />
+                  
+                  <div *ngIf="getLogistics(i).at(j).invalid && (getLogistics(i).at(j).dirty || getLogistics(i).at(j).touched)" class="text-red-500 text-sm">
+                    <div *ngIf="getLogistics(i).at(j).errors?.['required']">La logistique est requise.</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 mt-2 p-2 text-xs  text-white rounded-md">
+                  <button type="button" (click)="addLogistics(i)" class="flex items-center gap-2 mt-2 p-2 text-xs bg-yellow-500 text-white rounded-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  <div>
+                    Ajouter 
+                  </div>   
+                </button>
+                <button type="button" (click)="deleteLogistics(i)" class="flex items-center gap-2 mt-2 px-1 py-1 text-xs bg-gray-200 text-gray-500 border border-gray-300 rounded-md">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                  </svg>          
+                </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h6 id="accordion-collapse-heading-4">
+            <button type="button" class="dark:bg-sky-950 flex items-center text-sm justify-between w-full p-4 font-medium text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" (click)="toggleAccordion(3)" data-accordion-target="#accordion-collapse-body-4" aria-expanded="false" aria-controls="accordion-collapse-body-4">
+              <span>Observation</span>
+              <svg data-accordion-icon [ngClass]="{'rotate-180': accordionOpenStates[3]}" class="w-3 h-3 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+              </svg>
+            </button>
+          </h6>
+          <div id="accordion-collapse-body-4" [ngClass]="{'hidden': !accordionOpenStates[3]}" aria-labelledby="accordion-collapse-heading-4">
+            <div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700">
+              <div formArrayName="observations">
+                <div *ngFor="let observation of getObservations(i).controls; let i = index">
+                  <textarea [formControlName]="i" placeholder="Observation" class="dark:bg-zinc-400 dark:text-zinc-50 dark:placeholder-zinc-300 placeholder-gray-500 w-full p-2 border border-gray-300 rounded-md"></textarea>
+                </div>
+                <div class="flex items-center gap-2 mt-2 p-2 text-xs  text-white rounded-md">
+                  <button type="button" (click)="addObservation(i)" class="flex items-center gap-2 mt-2 p-2 text-xs bg-yellow-500 text-white rounded-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    <div>
+                      Ajouter 
+                    </div>              
+                  </button>
+                  <button type="button" (click)="deleteObservation(i)" class="flex items-center gap-2 mt-2 px-1 py-1 text-xs bg-gray-200 text-gray-500 border border-gray-300 rounded-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                    </svg>          
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-full flex justify-end gap-2">
+
+          <button type="button" (click)="deleteForm(i)" class="mb-4 p-1 py-0 bg-gray-200 border border-gray-300 rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+            </svg>
+                          
+          </button>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <!-- Buttons at the base of all forms -->
+  <div class="w-full h-auto p-auto flex flex-row justify-end gap-1 mt-4 !z-[2]">
+    <div class="w-1/2 h-auto p-auto flex flex-row justify-between gap-1 mt-4">
+      <button type="button" [disabled]="isLoading" (click)="onSubmitAll()" class="w-1/2 p-2 bg-sky-800 text-white rounded-md hover:bg-sky-900">Planifier</button>
+      <button type="button" (click)="resetAllForms()" class="w-1/2 bg-zinc-400 text-zinc-100 border border-gray-200 rounded-md hover:dark:bg-gray-300">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- Spinner -->
+<div class="text-center h-full w-full bg-black/10 !z-[1000] fixed inset-0 flex items-center justify-center " *ngIf="isLoading">
+  <div role="status">
+    <svg aria-hidden="true" class="inline w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-blue-950" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+      <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+    </svg>
+    <span class="sr-only">Loading...</span>
+  </div>s
+</div>
+
+<!-- Success Message -->
+<div *ngIf="successMessage" id="toast-success" 
+  [ngClass]="{'opacity-100': successMessage, 'opacity-0': !successMessage}" 
+  class="toast-message z-50 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-opacity duration-500 ease-in-out" role="alert">
+  
+  <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+    </svg>
+    <span class="sr-only">Check icon</span>
+  </div>
+  
+  <div class="ms-3 text-sm font-normal ">{{ successMessage }}</div>
+  
+  <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-success" aria-label="Close">
+    <span class="sr-only">Close</span>
+    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+    </svg>
+  </button>
+</div>
+
+<!-- Error Message -->
+<div *ngIf="errorMessage" id="toast-error" 
+  [ngClass]="{'opacity-100': errorMessage, 'opacity-0': !errorMessage}" 
+  class="toast-message z-50 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-opacity duration-500 ease-in-out" role="alert">
+
+  <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200">
+    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/>
+    </svg>
+    <span class="sr-only">Error icon</span>
+  </div>
+  
+  <div class="ms-3 text-sm font-normal">{{ errorMessage }}</div>
+  
+  <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-error" aria-label="Close">
+    <span class="sr-only">Close</span>
+    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+    </svg>
+  </button>
+</div>
+
+<!-- Error Message -->
+<div *ngIf="duplicateEmailError" id="toast-error"
+  [ngClass]="{'opacity-100': duplicateEmailError, 'opacity-0': !duplicateEmailError}" 
+  class="toast-message z-50 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-opacity duration-500 ease-in-out"
+  role="alert">
+
+  <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200">
+    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/>
+    </svg>
+    <span class="sr-only">Error icon</span>
+  </div>
+
+  <div class="ms-3 text-sm font-normal">Des emails sont dupliqués.</div>
+
+  <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
+    (click)="closeToast()" aria-label="Close">
+    <span class="sr-only">Close</span>
+    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+    </svg>
+  </button>
+</div>
+
+
